@@ -1,5 +1,4 @@
 import Em from 'ember';
-var get = Em.get;
 var computed = Em.computed;
 
 var min = Math.min, max = Math.max;
@@ -59,20 +58,7 @@ var ArrayLimit = Em.ArrayProxy.extend({
 			return;
 		}
 		var arrangedContent = this.get('arrangedContent');
-		var arrangedContentLength = get(arrangedContent, 'length');
-		var limit = this.get('limit');
-		if (idx >= limit) {
-			return;
-		}
-		if (idx + removedCount > arrangedContentLength) {
-			removedCount = arrangedContentLength - idx;
-		}
 		arrangedContent.replace(idx, removedCount);
-		arrangedContentLength = get(arrangedContent, 'length');
-		if (arrangedContentLength < limit) {
-			var toAdd = arr.slice(arrangedContentLength, limit);
-			arrangedContent.replace(arrangedContentLength, 0, toAdd);
-		}
 	},
 
 	// process items added
