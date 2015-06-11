@@ -59,6 +59,10 @@ var ArrayLimit = Em.ArrayProxy.extend({
 		}
 		var arrangedContent = this.get('arrangedContent');
 		arrangedContent.replace(idx, removedCount);
+		var limit = this.get('limit');
+		var toAdd = arr.slice(limit, limit + removedCount);
+		arrangedContent.replace(limit, 0, toAdd);
+		arrangedContent.replace(limit, Infinity); // TODO: better logic
 	},
 
 	// process items added
@@ -68,9 +72,6 @@ var ArrayLimit = Em.ArrayProxy.extend({
 		}
 		var arrangedContent = this.get('arrangedContent');
 		var limit = this.get('limit');
-		if (idx >= limit) {
-			return;
-		}
 		var end = min(idx + addedCount, limit);
 		var toAdd = arr.slice(idx, end);
 		arrangedContent.replace(idx, 0, toAdd);
