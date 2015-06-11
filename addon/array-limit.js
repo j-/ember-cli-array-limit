@@ -50,7 +50,10 @@ var ArrayLimit = Em.ArrayProxy.extend({
 	}),
 
 	// process items removed
-	contentArrayWillChange: function (arr, idx, removedCount, addedCount) {
+	contentArrayWillChange: function (arr, idx, removedCount/*, addedCount*/) {
+		if (removedCount <= 0) {
+			return;
+		}
 		var arrangedContent = this.get('arrangedContent');
 		var arrangedContentLength = get(arrangedContent, 'length');
 		var limit = this.get('limit');
@@ -70,6 +73,9 @@ var ArrayLimit = Em.ArrayProxy.extend({
 
 	// process items added
 	contentArrayDidChange: function (arr, idx, removedCount, addedCount) {
+		if (addedCount <= 0) {
+			return;
+		}
 		var arrangedContent = this.get('arrangedContent');
 		var limit = this.get('limit');
 		if (idx >= limit) {
