@@ -5,6 +5,12 @@ var computed = Em.computed;
 var DEFAULT_LIMIT = Infinity;
 
 var ArrayLimit = Em.ArrayProxy.extend({
+	content: computed({
+		get: function () {
+			return Em.A();
+		}
+	}),
+
 	limit: computed({
 		get: function () {
 			return DEFAULT_LIMIT;
