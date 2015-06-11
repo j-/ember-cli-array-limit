@@ -49,3 +49,19 @@ QUnit.test('limit cannot be negative', function (assert) {
 	proxy.decrementProperty('limit');
 	assert.equal(proxy.get('limit'), 0, 'Limit property decremented');
 });
+
+QUnit.test('length is updated', function (assert) {
+	var arr = Em.A(['a', 'b', 'c', 'd', 'e', 'f']);
+	var proxy = ArrayLimit.create({
+		content: arr
+	});
+	assert.equal(proxy.get('length'), 6, 'Default limit');
+	proxy.set('limit', 1);
+	assert.equal(proxy.get('length'), 1, 'Limit of 1');
+	proxy.set('limit', 5);
+	assert.equal(proxy.get('length'), 5, 'Limit of 5');
+	proxy.set('limit', 7);
+	assert.equal(proxy.get('length'), 6, 'Limit of 7 (greater than content length)');
+	proxy.set('limit', 3);
+	assert.equal(proxy.get('length'), 3, 'Limit of 3');
+});
