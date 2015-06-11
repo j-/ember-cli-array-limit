@@ -31,11 +31,15 @@ var ArrayLimit = Em.ArrayProxy.extend({
 			}
 			var content = this.get('content');
 			var arranged = this.get('arrangedContent');
-			var arrangedLength = get(arranged, 'length');
-			var addedCount = max(diff, 0);
-			var removedCount = max(-diff, 0);
-			var toAdd = content.slice(old, old + addedCount);
-			arranged.replace(arrangedLength - removedCount, removedCount, toAdd);
+			var toAdd;
+			// limit decreased
+			if (diff < 0) {
+				arranged.replace(limit, -diff);
+			}
+			else {
+				toAdd = content.slice(old, limit);
+				arranged.replace(old, 0, toAdd);
+			}
 			return limit;
 		}
 	}),
