@@ -2,6 +2,8 @@ import Em from 'ember';
 var get = Em.get;
 var computed = Em.computed;
 
+var min = Math.min, max = Math.max;
+
 var DEFAULT_LIMIT = Infinity;
 
 var ArrayLimit = Em.ArrayProxy.extend({
@@ -17,7 +19,7 @@ var ArrayLimit = Em.ArrayProxy.extend({
 		},
 		set: function (name, limit, old) {
 			limit = Number(limit); // ensure limit is number
-			limit = Math.max(limit, 0); // do not allow negative limit
+			limit = max(limit, 0); // do not allow negative limit
 			if (old === undefined) {
 				// being set for first time, no need to update
 				return limit;
@@ -30,8 +32,8 @@ var ArrayLimit = Em.ArrayProxy.extend({
 			var content = this.get('content');
 			var arranged = this.get('arrangedContent');
 			var arrangedLength = get(arranged, 'length');
-			var addedCount = Math.max(diff, 0);
-			var removedCount = Math.max(-diff, 0);
+			var addedCount = max(diff, 0);
+			var removedCount = max(-diff, 0);
 			var toAdd = content.slice(old, old + addedCount);
 			arranged.replace(arrangedLength - removedCount, removedCount, toAdd);
 			return limit;
@@ -73,7 +75,7 @@ var ArrayLimit = Em.ArrayProxy.extend({
 		if (idx >= limit) {
 			return;
 		}
-		var end = Math.min(idx + addedCount, limit);
+		var end = min(idx + addedCount, limit);
 		var toAdd = arr.slice(idx, end);
 		arrangedContent.replace(idx, 0, toAdd);
 		arrangedContent.replace(limit, Infinity);
