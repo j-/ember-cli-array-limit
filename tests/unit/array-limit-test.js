@@ -265,3 +265,22 @@ QUnit.test('can replace with limit', function (assert) {
 	assert.equal(proxy.get('length'), 3, 'Replace 12 with CD');
 	assert.deepEqual(proxy.toArray(), ['a', 'b', 'c'], 'Replace 12 with CD');
 });
+
+QUnit.test('can be chained', function (assert) {
+	var arr = Em.A(['a', 'b', 'c', 'd', 'e', 'f']);
+	var proxy1 = ArrayLimit.create({
+		content: arr
+	});
+	var proxy2 = ArrayLimit.create({
+		content: proxy1,
+		limit: 5
+	});
+	assert.equal(proxy1.get('length'), 6, 'Proxy 1 limit is not affected');
+	assert.equal(proxy2.get('length'), 5, 'Proxy 2 limit is enforced');
+	arr.replace(4, 2);
+	assert.equal(proxy1.get('length'), 4, 'Proxy 1 length is updated');
+	assert.equal(proxy2.get('length'), 4, 'Proxy 2 length is updated');
+	proxy1.set('limit', 3);
+	assert.equal(proxy1.get('length'), 3, 'Proxy 1 limit is updated');
+	assert.equal(proxy2.get('length'), 3, 'Proxy 2 length is updated');
+});
