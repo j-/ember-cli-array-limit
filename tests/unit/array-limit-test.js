@@ -66,8 +66,6 @@ QUnit.test('length is updated', function (assert) {
 	assert.equal(proxy.get('length'), 3, 'Limit of 3');
 });
 
-
-
 QUnit.test('can push with no limit', function (assert) {
 	var arr = Em.A(['a', 'b', 'c']);
 	var proxy = ArrayLimit.create({
