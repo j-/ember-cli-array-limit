@@ -284,3 +284,18 @@ QUnit.test('can be chained', function (assert) {
 	assert.equal(proxy1.get('length'), 3, 'Proxy 1 limit is updated');
 	assert.equal(proxy2.get('length'), 3, 'Proxy 2 length is updated');
 });
+
+QUnit.test('content array is proxied', function (assert) {
+	var arr = Em.A(['a', 'b', 'c', 'd', 'e', 'f']);
+	var proxy = ArrayLimit.create({
+		content: arr
+	});
+	assert.equal(proxy.get('length'), 6, 'Proxy length is correct');
+	assert.equal(arr.get('length'), 6, 'Content length is correct');
+	proxy.popObject();
+	assert.equal(proxy.get('length'), 5, 'Proxy length is updated');
+	assert.equal(arr.get('length'), 5, 'Content length is updated');
+	proxy.set('limit', 3);
+	assert.equal(proxy.get('length'), 3, 'Proxy length is updated');
+	assert.equal(arr.get('length'), 5, 'Content length is unchanged');
+});
