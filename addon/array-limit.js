@@ -1,55 +1,49 @@
 import Em from 'ember';
-import computed from 'ember-new-computed';
 
+var computed = Em.computed;
 var min = Math.min, max = Math.max;
 
 var DEFAULT_LIMIT = Infinity;
 
 var ArrayLimit = Em.ArrayProxy.extend({
-	content: computed({
-		get: function () {
-			return Em.A();
-		}
+	content: computed(function () {
+		return Em.A();
 	}),
 
-	limit: computed({
-		get: function () {
+	limit: computed(function (name, limit, old) {
+		if (arguments.length <= 1) {
 			return DEFAULT_LIMIT;
-		},
-		set: function (name, limit, old) {
-			limit = Number(limit); // ensure limit is number
-			limit = max(limit, 0); // do not allow negative limit
-			if (old === undefined) {
-				// being set for first time, no need to update
-				return limit;
-			}
-			var diff = limit - old;
-			if (diff === 0) {
-				// no need to continue if no difference
-				return limit;
-			}
-			var content = this.get('content');
-			var arranged = this.get('arrangedContent');
-			var toAdd;
-			// limit decreased
-			if (diff < 0) {
-				arranged.replace(limit, -diff);
-			}
-			else {
-				toAdd = content.slice(old, limit);
-				arranged.replace(old, 0, toAdd);
-			}
+		}
+		limit = Number(limit); // ensure limit is number
+		limit = max(limit, 0); // do not allow negative limit
+		if (old === undefined) {
+			// being set for first time, no need to update
 			return limit;
 		}
+		var diff = limit - old;
+		if (diff === 0) {
+			// no need to continue if no difference
+			return limit;
+		}
+		var content = this.get('content');
+		var arranged = this.get('arrangedContent');
+		var toAdd;
+		// limit decreased
+		if (diff < 0) {
+			arranged.replace(limit, -diff);
+		}
+		else {
+			toAdd = content.slice(old, limit);
+			arranged.replace(old, 0, toAdd);
+		}
+		return limit;
 	}),
 
-	arrangedContent: computed('content', {
-		get: function () {
-			var content = this.get('content');
-			var limit = this.get('limit');
-			var slice = content.slice(0, limit);
-			return Em.A(slice);
-		}
+	arrangedContent: computed('content', function () {
+		var content = this.get('content');
+		var limit = this.get('limit');
+		var slice = content.slice(0, limit);
+		return Em.A(slice);
 	}),
 
 	// process items removed
