@@ -2,6 +2,7 @@ import Em from 'ember';
 
 var computed = Em.computed;
 var min = Math.min, max = Math.max;
+var get = Em.get;
 
 var DEFAULT_LIMIT = Infinity;
 
@@ -52,12 +53,13 @@ var ArrayLimit = Em.ArrayProxy.extend({
 			return;
 		}
 		var arrangedContent = this.get('arrangedContent');
-		arrangedContent.replace(idx, Infinity);
+		var arrangedLength = get(arrangedContent, 'length');
+		arrangedContent.replace(idx, arrangedLength - idx);
 		var limit = this.get('limit');
 		var start = idx + removedCount;
-		var toAdd = arr.slice(start);
+		var end = limit + removedCount;
+		var toAdd = arr.slice(start, end);
 		arrangedContent.pushObjects(toAdd);
-		arrangedContent.replace(limit, Infinity); // TODO: better logic
 	},
 
 	// process items added
@@ -70,7 +72,8 @@ var ArrayLimit = Em.ArrayProxy.extend({
 		var end = min(idx + addedCount, limit);
 		var toAdd = arr.slice(idx, end);
 		arrangedContent.replace(idx, 0, toAdd);
-		arrangedContent.replace(limit, Infinity);
+		var arrangedLength = get(arrangedContent, 'length');
+		arrangedContent.replace(limit, arrangedLength);
 	}
 });
 
