@@ -1,5 +1,5 @@
 import Em from 'ember';
-var computed = Em.computed;
+import computed from 'ember-new-computed';
 
 var min = Math.min, max = Math.max;
 
