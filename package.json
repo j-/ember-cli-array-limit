@@ -1,6 +1,6 @@
 {
   "name": "ember-cli-array-limit",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "description": "Ember CLI array limit proxy",
   "directories": {
     "doc": "doc",
