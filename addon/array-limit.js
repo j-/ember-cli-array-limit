@@ -11,33 +11,35 @@ var ArrayLimit = Em.ArrayProxy.extend({
 		return Em.A();
 	}),
 
-	limit: computed(function (name, limit, old) {
-		if (arguments.length <= 1) {
+	limit: computed({
+		get: function () {
 			return DEFAULT_LIMIT;
-		}
-		limit = Number(limit); // ensure limit is number
-		limit = max(limit, 0); // do not allow negative limit
-		if (old === undefined) {
-			// being set for first time, no need to update
+		},
+		set: function (name, limit, old) {
+			limit = Number(limit); // ensure limit is number
+			limit = max(limit, 0); // do not allow negative limit
+			if (old === undefined) {
+				// being set for first time, no need to update
+				return limit;
+			}
+			var diff = limit - old;
+			if (diff === 0) {
+				// no need to continue if no difference
+				return limit;
+			}
+			var content = this.get('content');
+			var arranged = this.get('arrangedContent');
+			var toAdd;
+			// limit decreased
+			if (diff < 0) {
+				arranged.replace(limit, -diff);
+			}
+			else {
+				toAdd = content.slice(old, limit);
+				arranged.replace(old, 0, toAdd);
+			}
 			return limit;
 		}
-		var diff = limit - old;
-		if (diff === 0) {
-			// no need to continue if no difference
-			return limit;
-		}
-		var content = this.get('content');
-		var arranged = this.get('arrangedContent');
-		var toAdd;
-		// limit decreased
-		if (diff < 0) {
-			arranged.replace(limit, -diff);
-		}
-		else {
-			toAdd = content.slice(old, limit);
-			arranged.replace(old, 0, toAdd);
-		}
-		return limit;
 	}),
 
 	arrangedContent: computed('content', function () {
